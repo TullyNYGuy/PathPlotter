@@ -10,9 +10,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("PathPlotter.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("PathPlotter.fxml"));
+        Parent root = (Parent) loader.load();
+        PathPlotterController controller = loader.getController();
+        // set the stage so the controller can use it later
+        controller.setStage(primaryStage);
+
+        primaryStage.setTitle("Path Plotter");
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
     }
 
