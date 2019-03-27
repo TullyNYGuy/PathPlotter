@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -18,7 +20,7 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <VBox prefHeight="400.0" prefWidth="640.0">
+      <VBox prefHeight="1000.0" prefWidth="1000.0">
          <children>
             <MenuBar>
               <menus>
@@ -26,6 +28,8 @@
                   <items>
                         <MenuItem fx:id="openLog" mnemonicParsing="false" onAction="#onOpenLogSelected" text="Open Log" />
                         <MenuItem fx:id="openLogs" mnemonicParsing="false" onAction="#onOpenLogsSelected" text="Open Logs" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="plotSeries" mnemonicParsing="false" onAction="#onPlotSeriesSelected" text="Plot Series" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem fx:id="close" mnemonicParsing="false" onAction="#onCloseSelected" text="Close" />
                         <MenuItem fx:id="exit" mnemonicParsing="false" onAction="#onExitSelected" text="Exit" />
@@ -43,6 +47,14 @@
                 </Menu>
               </menus>
             </MenuBar>
+            <ScatterChart fx:id="scatterChart" prefHeight="1000.0">
+              <xAxis>
+                <NumberAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </ScatterChart>
             <AnchorPane />
          </children>
       </VBox>
