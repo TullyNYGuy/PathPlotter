@@ -17,7 +17,9 @@ public class Main extends Application {
         controller.setStage(primaryStage);
 
         primaryStage.setTitle("Path Plotter");
-        primaryStage.setScene(new Scene(root, 1000, 1000));
+        Scene scene = new Scene(root, 1000, 1000);
+        scene.getStylesheets().add("sample/chart.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

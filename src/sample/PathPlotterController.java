@@ -2,6 +2,7 @@ package sample;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
@@ -87,9 +88,13 @@ public class PathPlotterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         NumberAxis xAxis = (NumberAxis) scatterChart.getXAxis();
+        // field is 12' x 12'. Put the 0,0 in the center of  the field. So the field becomes -6' to +6'.
+        // now convert that to inches. so -72" to +72"
+        // autoranging rounds the field up to 80" so turn it off.
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(-72.0);
         xAxis.setUpperBound(72.0);
+        // tick mark every inch
         xAxis.setTickUnit(1.0);
 
         NumberAxis yAxis = (NumberAxis) scatterChart.getYAxis();
@@ -99,7 +104,9 @@ public class PathPlotterController implements Initializable {
         yAxis.setTickUnit(1.0);
 
         scatterChart.setTitle("Rover Ruckus Field");
-        scatterChart.setBackground(setFieldAsBackground());
+        scatterChart.setStyle("-fx-background-color: transparent;");
+        // changed to using a css for setting background
+        //scatterChart.setBackground(setFieldAsBackground());
     }
 
     /**
@@ -173,12 +180,15 @@ public class PathPlotterController implements Initializable {
             // create a image
             Image image = new Image(input);
 
+            BackgroundSize imageSize = new BackgroundSize(.95, .95, true, true, false, false);
+            BackgroundPosition imagePosition = new BackgroundPosition(Side.LEFT, .80, true, Side.TOP, .5, true);
+
             // create a background image
             BackgroundImage backgroundimage = new BackgroundImage(image,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.DEFAULT,
-                    BackgroundSize.DEFAULT);
+                    imagePosition,
+                    imageSize);
             // create Background
             background = new Background(backgroundimage);
         }

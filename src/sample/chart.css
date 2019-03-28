@@ -1,0 +1,17 @@
+.chart {
+    -fx-padding: 10px;
+}
+
+.chart-content {
+    -fx-padding: 30px;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+    -fx-background-image: url("file:////C:/FTC/2018Robot/Robot%20Logs/field.jpg");
+}
