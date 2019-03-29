@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
@@ -9,9 +10,13 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.gillius.jfxutils.chart.ChartPanManager;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,6 +112,47 @@ public class PathPlotterController implements Initializable {
         scatterChart.setStyle("-fx-background-color: transparent;");
         // changed to using a css for setting background
         //scatterChart.setBackground(setFieldAsBackground());
+
+        scatterChart.setOnMouseMoved( new EventHandler<MouseEvent>() {
+            @Override
+            public void handle( MouseEvent mouseEvent ) {
+                double xStart = scatterChart.getXAxis().getLocalToParentTransform().getTx();
+                double axisXRelativeMousePosition = mouseEvent.getX() - xStart;
+//                outputLabel.setText( String.format(
+//                        "%d, %d (%d, %d); %d - %d",
+//                        (int) mouseEvent.getSceneX(), (int) mouseEvent.getSceneY(),
+//                        (int) mouseEvent.getX(), (int) mouseEvent.getY(),
+//                        (int) xStart,
+//                        scatterChart.getXAxis().getValueForDisplay( axisXRelativeMousePosition ).intValue()
+//                ) );
+            }
+        } );
+
+        //Panning works via either secondary (right) mouse or primary with ctrl held down
+        ChartPanManager panner = new ChartPanManager( scatterChart );
+        panner.setMouseFilter( new EventHandler<MouseEvent>() {
+            @Override
+            public void handle( MouseEvent mouseEvent ) {
+                if ( mouseEvent.getButton() == MouseButton.SECONDARY ||
+                        ( mouseEvent.getButton() == MouseButton.PRIMARY &&
+                                mouseEvent.isShortcutDown() ) ) {
+                    //let it through
+                } else {
+                    mouseEvent.consume();
+                }
+            }
+        } );
+        panner.start();
+
+        //Zooming works only via primary mouse button without ctrl held down
+        JFXChartUtil.setupZooming( scatterChart, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle( MouseEvent mouseEvent ) {
+                if ( mouseEvent.getButton() != MouseButton.PRIMARY ||
+                        mouseEvent.isShortcutDown() )
+                    mouseEvent.consume();
+            }
+        } );
     }
 
     /**
