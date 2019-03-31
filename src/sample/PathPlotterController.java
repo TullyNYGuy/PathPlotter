@@ -49,6 +49,8 @@ public class PathPlotterController implements Initializable {
     private void onOpenLogSelected() {
         logFile = chooseSingleLog();
         System.out.println("log selected: " + logFile.getAbsolutePath());
+        LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
+        logFileReader.readLogFile();
     }
 
     @FXML
