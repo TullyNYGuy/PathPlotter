@@ -3,6 +3,7 @@ package sample;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.gillius.jfxutils.chart.ChartPanManager;
@@ -21,6 +23,7 @@ import org.gillius.jfxutils.chart.JFXChartUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -64,7 +67,7 @@ public class PathPlotterController implements Initializable {
 
     @FXML
     private void onPlotSeriesSelected() {
-        plotSeries(populateSeries());
+        plotSeries();
     }
     @FXML
     private MenuItem close;
@@ -110,7 +113,7 @@ public class PathPlotterController implements Initializable {
 
         scatterChart.setTitle("Rover Ruckus Field");
         scatterChart.setStyle("-fx-background-color: transparent;");
-        // changed to using a css for setting background
+        // Use a read in jpg as the background. Make sure to remove the css that set that background before using this.
         //scatterChart.setBackground(setFieldAsBackground());
 
         scatterChart.setOnMouseMoved( new EventHandler<MouseEvent>() {
@@ -194,6 +197,59 @@ public class PathPlotterController implements Initializable {
         return fileList;
     }
 
+    private List<Point2D> populateListPoints() {
+        List<Point2D> points = new ArrayList<Point2D>();
+
+        points.add(new Point2D(0.00035639, 0.02969991));
+        points.add(new Point2D(0.074614561, 5.583471315));
+        points.add(new Point2D(0.124995353, 10.06819709));
+        points.add(new Point2D(0.15946843, 14.46395602));
+        points.add(new Point2D(0.228184889, 19.33450464));
+        points.add(new Point2D(0.452510906, 24.67592053));
+        points.add(new Point2D(0.878191521, 30.57115082));
+        points.add(new Point2D(1.241740945, 35.07114156));
+        points.add(new Point2D(1.461248485, 39.5802535));
+        points.add(new Point2D(1.505471804, 45.60922939));
+        points.add(new Point2D(1.452598183, 48.46013578));
+        points.add(new Point2D(1.193724876, 55.76190117));
+
+        return points;
+    }
+
+    private List<Point2D> translatePoints(List<Point2D> points) {
+        List<Point2D> translatedPoints = new ArrayList<Point2D>();
+
+        for (Point2D point : points) {
+            point = point.add(10,10);
+            translatedPoints.add(point);
+        }
+    return translatedPoints;
+    }
+
+    private List<Point2D> rotatePoints(List<Point2D> points) {
+        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
+        Rotate rotate = new Rotate();
+        rotate.setAngle(-45);
+        rotate.setPivotX(0.0);
+        rotate.setPivotY(0.0);
+
+        for (Point2D point : points) {
+            Point2D rotatedPoint = rotate.transform(point.getX(), point.getY());
+            rotatedPoints.add(rotatedPoint);
+        }
+        return rotatedPoints;
+    }
+
+    private XYChart.Series populateSeriesFromListOfPoints(List<Point2D> points) {
+        XYChart.Series series = new XYChart.Series();
+
+        for (Point2D point : points) {
+            series.getData().add(new XYChart.Data(point.getX(), point.getY()));
+        }
+        return series;
+    }
+
+
     private XYChart.Series populateSeries() {
         XYChart.Series series1 = new XYChart.Series();
 
@@ -214,8 +270,19 @@ public class PathPlotterController implements Initializable {
         return series1;
     }
 
-    private void plotSeries(XYChart.Series series) {
-        scatterChart.getData().addAll(series);
+
+    private void plotSeries() {
+        List<Point2D> originalPoints = new ArrayList<Point2D>();
+        originalPoints = populateListPoints();
+        scatterChart.getData().addAll(populateSeriesFromListOfPoints(originalPoints));
+
+        List<Point2D> translatedPoints = new ArrayList<Point2D>();
+        translatedPoints = translatePoints(originalPoints);
+        scatterChart.getData().addAll(populateSeriesFromListOfPoints(translatedPoints));
+
+        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
+        rotatedPoints = rotatePoints(originalPoints);
+        scatterChart.getData().addAll(populateSeriesFromListOfPoints(rotatedPoints));
     }
 
     private Background setFieldAsBackground() {
