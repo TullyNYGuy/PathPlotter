@@ -2,18 +2,17 @@ package sample;
 
 import javafx.geometry.Point2D;
 
-import java.util.ArrayList;
-import java.util.List;
+public class HeadingDistanceLine {
 
-public class HeadingDistancePointList {
     //*********************************************************************************************
     //          PRIVATE DATA FIELDS
     //
     // can be accessed only by this class, or by using the public
     // getter and setter methods
     //*********************************************************************************************
-    private List<HeadingDistancePoint> headingDistancePointList;
 
+    private double heading;
+    private double distance;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -23,9 +22,6 @@ public class HeadingDistancePointList {
     //*********************************************************************************************
 
 
-    public List<HeadingDistancePoint> getHeadingDistancePointList() {
-        return headingDistancePointList;
-    }
 
     //*********************************************************************************************
     //          Constructors
@@ -33,37 +29,38 @@ public class HeadingDistancePointList {
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
-    public HeadingDistancePointList() {
-        headingDistancePointList = new ArrayList<>();
-    }
 
+    public HeadingDistanceLine(double heading, double distance){
+        this.heading = heading;
+        this.distance = distance;
+    }
 
     //*********************************************************************************************
     //          MAJOR METHODS
     //
     // public methods that give the class its functionality
     //*********************************************************************************************
-    public void add(HeadingDistancePoint headingDistancePoint) {
-        headingDistancePointList.add(headingDistancePoint);
+
+    private double findSlope(){
+        double slope = Math.tan(Math.toRadians(heading));
+        return slope;
     }
 
-    public Point2DList convertToXY() {
-        double heading;
-        double distance;
-        double x;
+    private double maximumX(){
+        double maximumX = distance/Math.sqrt(1 + Math.pow(Math.tan(Math.toRadians(heading)), 2));
+        return maximumX;
+    }
+
+    public Point2DList convertToXY(){
         double y;
         Point2DList point2DList = new Point2DList();
-        Point2D initialPoint = new Point2D(0, 0);
-        point2DList.add(initialPoint);
-        for (HeadingDistancePoint headingDistancePoint : headingDistancePointList) {
-            heading = headingDistancePoint.getHeading();
-            distance = headingDistancePoint.getDistance();
-            x = distance*Math.cos(Math.toRadians(heading));
-            y = distance*Math.sin(Math.toRadians(heading));
+        for (double x = 0; x < maximumX(); x = x + maximumX() / 25){
+            y = Math.tan(Math.toRadians(heading))*x;
             point2DList.add(new Point2D(x,y));
         }
+        y = Math.tan(Math.toRadians(heading))*maximumX();
+        point2DList.add(new Point2D(maximumX(),y));
         return point2DList;
     }
+
 }
-
-

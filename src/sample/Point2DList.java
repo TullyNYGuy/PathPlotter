@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,4 +48,21 @@ public class Point2DList {
        point2DList.add(point2D);
     }
 
+    public List<Point2D> translate(double x, double y) {
+        return point2DList;
+    }
+
+    public List<Point2D> rotate(double angle) {
+        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
+        Rotate rotate = new Rotate();
+        rotate.setAngle(angle);
+        rotate.setPivotX(0.0);
+        rotate.setPivotY(0.0);
+
+        for (Point2D point : point2DList) {
+            Point2D rotatedPoint = rotate.transform(point.getX(), point.getY());
+            rotatedPoints.add(rotatedPoint);
+        }
+        return rotatedPoints;
+    }
 }

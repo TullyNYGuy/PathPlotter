@@ -88,6 +88,17 @@ public class PathPlotterController implements Initializable {
     }
 
     @FXML
+    private MenuItem testDesiredLine;
+
+    @FXML
+    private void onTestDesiredLineSelected() {
+        XYChart.Series series;
+        HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100);
+        series = populateSeriesFromListOfPoints(headingDistanceLine.convertToXY().getPoint2DList());
+        scatterChart.getData().addAll(series);
+    }
+
+    @FXML
     private ScatterChart scatterChart;
 
     /**
