@@ -6,7 +6,13 @@ import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriveStraightUsingIMUActual {
+public class ActualMovement {
+
+    public enum MovementType{
+        CURVE,
+        DRIVE_STRAIGHT_USING_IMU,
+        SPIN_TURN
+    }
     //*********************************************************************************************
     //          PRIVATE DATA FIELDS
     //
@@ -15,6 +21,7 @@ public class DriveStraightUsingIMUActual {
     //*********************************************************************************************
     private HeadingDistancePointList headingDistancePointList;
 
+    private MovementType movementType;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -23,6 +30,13 @@ public class DriveStraightUsingIMUActual {
     // getPositionInTermsOfAttachment
     //*********************************************************************************************
 
+    public MovementType getMovementType() {
+        return movementType;
+    }
+
+    public void setMovementType(MovementType movementType) {
+        this.movementType = movementType;
+    }
 
     //*********************************************************************************************
     //          Constructors
@@ -30,7 +44,7 @@ public class DriveStraightUsingIMUActual {
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
-    public DriveStraightUsingIMUActual() {
+    public ActualMovement() {
         headingDistancePointList = new HeadingDistancePointList();
     }
 

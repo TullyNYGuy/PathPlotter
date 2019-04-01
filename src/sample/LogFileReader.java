@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.chart.ScatterChart;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,10 +21,11 @@ public class LogFileReader {
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
-    public LogFileReader(String file){
-        this.filePath=file;
+    public LogFileReader(String file) {
+        this.filePath = file;
 
     }
+
     //*********************************************************************************************
     //          MAJOR METHODS
     //
@@ -31,15 +34,20 @@ public class LogFileReader {
     public void readLogFile() {
         File file = new File(filePath);
         String time;
-        String key;
+        String action;
+        String movement;
         String line;
         String value;
         Scanner scannerFile = null;
         Scanner scannerLine = null;
+        ActualMovement driveStraightUsingIMUActual = null;
+        ActualMovement driveCurve = null;
+        ActualMovement spinTurn = null;
+
         try {
             scannerFile = new Scanner(file);
             scannerFile.useDelimiter(", | ");
-            if (scannerFile.hasNextLine()){
+            if (scannerFile.hasNextLine()) {
                 scannerFile.nextLine();
                 scannerFile.nextLine();
                 System.out.println("threwAwayFirstTwoLines");
@@ -49,19 +57,80 @@ public class LogFileReader {
                 if (!line.isEmpty()) {
                     scannerLine = new Scanner(line);
                     scannerLine.useDelimiter(", | ");
-                    time = scannerLine.next();
-                    key = scannerLine.next();
-                    switch (key) {
-                        case "DRIVE_STRAIGHT_USING_IMU":
-                            System.out.println("foundDriveStright");
-                            scannerFile.nextLine();
-                            break;
-                        case "CURVE":
-                            System.out.println("foundCurve");
-                            scannerFile.nextLine();
-                            break;
-                        default:
-                            break;
+                    // parse the time
+                    if (scannerLine.hasNext()) {
+                        time = scannerLine.next();
+                    }
+                    // parse the movement
+                    if (scannerLine.hasNext()) {
+                        movement = scannerLine.next();
+                        switch (movement) {
+
+                            case "DRIVE_STRAIGHT_USING_IMU":
+                                if (scannerLine.hasNext()) {
+                                    action = scannerLine.next();
+                                    switch (action) {
+                                        case "DESIRED":
+                                            break;
+                                        case "INITIAL_HEADING_DISTANCE":
+                                            driveStraightUsingIMUActual = new ActualMovement();
+                                            driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            break;
+                                        case "HEADING_DISTANCE":
+                                            driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            break;
+                                        case "FINAL_HEADING_DISTANCE":
+                                            driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            // add this to the list of movements
+                                            break;
+                                    }
+                                }
+                                break;
+
+                            case "CURVE":
+                                if (scannerLine.hasNext()) {
+                                    action = scannerLine.next();
+                                    switch (action) {
+                                        case "DESIRED":
+                                            break;
+                                        case "INITIAL_HEADING_DISTANCE":
+                                            driveCurve = new ActualMovement();
+                                            driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            break;
+                                        case "HEADING_DISTANCE_RATE":
+                                            driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            break;
+                                        case "FINAL_HEADING_DISTANCE":
+                                            driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
+                                            // add this to the list of movements
+                                            break;
+                                    }
+                                }
+                                break;
+
+                            case "SPIN_TURN":
+                                if (scannerLine.hasNext()) {
+                                    action = scannerLine.next();
+                                    switch (action) {
+                                        case "DESIRED":
+                                            break;
+                                        case "INITIAL_HEADING":
+                                            spinTurn = new ActualMovement();
+                                            spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
+                                            break;
+                                        case "HEADING_CORRECTION":
+                                            spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
+                                            break;
+                                        case "FINAL_HEADING":
+                                            spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
+                                            // add this to the list of movements
+                                            break;
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
