@@ -30,35 +30,39 @@ public class LogFileReader {
     //*********************************************************************************************
     public void readLogFile() {
         File file = new File(filePath);
+        String time;
         String key;
-        double time;
+        String line;
         String value;
-        Scanner scanner = null;
+        Scanner scannerFile = null;
+        Scanner scannerLine = null;
         try {
-            scanner = new Scanner(file);
-            scanner.useDelimiter(", | ");
-            if (scanner.hasNextLine()){
-                scanner.nextLine();
-                scanner.nextLine();
+            scannerFile = new Scanner(file);
+            scannerFile.useDelimiter(", | ");
+            if (scannerFile.hasNextLine()){
+                scannerFile.nextLine();
+                scannerFile.nextLine();
                 System.out.println("threwAwayFirstTwoLines");
             }
-            while (scanner.hasNextLine()) {
-                time = scanner.nextDouble();
-                key = scanner.next();
-                switch (key) {
-                    case "DRIVE_STRAIGHT_USING_IMU":
-                        System.out.println("foundDriveStright");
-                        scanner.nextLine();
-                        break;
-                    case "CURVE":
-                        System.out.println("foundCurve");
-                        scanner.nextLine();
-                        break;
-                    default:
-                        if (scanner.hasNextLine()) {
-                            scanner.nextLine();
-                        }
-                        break;
+            while (scannerFile.hasNextLine()) {
+                line = scannerFile.nextLine();
+                if (!line.isEmpty()) {
+                    scannerLine = new Scanner(line);
+                    scannerLine.useDelimiter(", | ");
+                    time = scannerLine.next();
+                    key = scannerLine.next();
+                    switch (key) {
+                        case "DRIVE_STRAIGHT_USING_IMU":
+                            System.out.println("foundDriveStright");
+                            scannerFile.nextLine();
+                            break;
+                        case "CURVE":
+                            System.out.println("foundCurve");
+                            scannerFile.nextLine();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         } catch (IOException e) {
