@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -96,6 +95,17 @@ public class PathPlotterController implements Initializable {
         HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100);
         series = populateSeriesFromListOfPoints(headingDistanceLine.convertToXY().getPoint2DList());
         scatterChart.getData().addAll(series);
+    }
+
+    @FXML
+    private MenuItem plotHeadingPointList;
+
+    @FXML
+    private void onPlotHeadingPointList() {
+        RobotMovementsActual driveStraightUsingIMUActual = new RobotMovementsActual();
+        driveStraightUsingIMUActual.createTestData();
+        XYChart.Series headingDistanceXYPlotData = driveStraightUsingIMUActual.convertHeadingDistanceToXYChartSeries();
+        scatterChart.getData().addAll(headingDistanceXYPlotData);
     }
 
     @FXML

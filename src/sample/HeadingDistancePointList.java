@@ -52,12 +52,13 @@ public class HeadingDistancePointList {
         double distance;
         double x;
         double y;
+        HeadingDistancePoint firstPoint = headingDistancePointList.get(0);
         Point2DList point2DList = new Point2DList();
         Point2D initialPoint = new Point2D(0, 0);
         point2DList.add(initialPoint);
         for (HeadingDistancePoint headingDistancePoint : headingDistancePointList) {
             heading = headingDistancePoint.getHeading();
-            distance = headingDistancePoint.getDistance();
+            distance = headingDistancePoint.getDistance()-firstPoint.getDistance();
             x = distance*Math.cos(Math.toRadians(heading));
             y = distance*Math.sin(Math.toRadians(heading));
             point2DList.add(new Point2D(x,y));

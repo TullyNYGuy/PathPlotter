@@ -2,11 +2,19 @@ package sample;
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriveStraightUsingIMUActual {
+public class RobotMovementsActual {
+
+
+    public enum MovementType{
+        CURVE,
+        DRIVE_STRAIGHT_USING_IMU,
+        SPIN_TURN
+    }
     //*********************************************************************************************
     //          PRIVATE DATA FIELDS
     //
@@ -14,6 +22,7 @@ public class DriveStraightUsingIMUActual {
     // getter and setter methods
     //*********************************************************************************************
     private HeadingDistancePointList headingDistancePointList;
+    private MovementType movementType;
 
 
     //*********************************************************************************************
@@ -24,13 +33,21 @@ public class DriveStraightUsingIMUActual {
     //*********************************************************************************************
 
 
+    public MovementType getMovementType() {
+        return movementType;
+    }
+
+    public void setMovementType(MovementType movementType) {
+        this.movementType = movementType;
+    }
+
     //*********************************************************************************************
     //          Constructors
     //
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
-    public DriveStraightUsingIMUActual() {
+    public RobotMovementsActual() {
         headingDistancePointList = new HeadingDistancePointList();
     }
 
@@ -72,5 +89,10 @@ public class DriveStraightUsingIMUActual {
         headingDistancePointList.add(new HeadingDistancePoint(0.3125, 14.583705772811918));
         headingDistancePointList.add(new HeadingDistancePoint(0.5, 15.445065176908752));
         headingDistancePointList.add(new HeadingDistancePoint(0.75, 16.48463687150838));
+    }
+    public XYChart.Series convertHeadingDistanceToXYChartSeries(){
+        Point2DList point2DList = headingDistancePointList.convertToXY();
+        XYChart.Series xyChartSeries = point2DList.convertToXYChartSeries();
+        return xyChartSeries;
     }
 }

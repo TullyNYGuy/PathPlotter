@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.chart.XYChart;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
@@ -65,4 +66,19 @@ public class Point2DList {
         }
         return rotatedPoints;
     }
+    public XYChart.Series convertToXYChartSeries() {
+        XYChart.Series series = new XYChart.Series();
+        double x;
+        double y;
+        XYChart.Data xyChartData;
+
+        for (Point2D point : point2DList) {
+            x = point.getX();
+            y = point.getY();
+            xyChartData = new XYChart.Data(x, y);
+            series.getData().add(xyChartData);
+        }
+        return series;
+    }
+
 }
