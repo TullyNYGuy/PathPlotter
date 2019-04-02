@@ -13,7 +13,9 @@ public class HeadingDistancePointList {
     // getter and setter methods
     //*********************************************************************************************
     private List<HeadingDistancePoint> headingDistancePointList;
-
+    private double previousDistance = 0;
+    private double previousX = 0;
+    private double previousY = 0;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -65,9 +67,12 @@ public class HeadingDistancePointList {
         for (HeadingDistancePoint headingDistancePoint : headingDistancePointList) {
             heading = headingDistancePoint.getHeading();
             distance = headingDistancePoint.getDistance();
-            x = distance*Math.cos(Math.toRadians(heading));
-            y = distance*Math.sin(Math.toRadians(heading));
+            x = (distance-previousDistance)*Math.cos(Math.toRadians(heading)) + previousX;
+            y = (distance-previousDistance)*Math.sin(Math.toRadians(heading)) + previousY;
             point2DList.add(new Point2D(x,y));
+            previousDistance = distance;
+            previousX = x;
+            previousY = y;
         }
         return point2DList;
     }
