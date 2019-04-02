@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.chart.XYChart;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
@@ -46,6 +47,26 @@ public class Point2DList {
     //*********************************************************************************************
     public void add(Point2D point2D){
        point2DList.add(point2D);
+    }
+
+    public void toInches() {
+        double x;
+        double y;
+        List<Point2D> pointsInInches = new ArrayList<>();
+        for (Point2D point : point2DList) {
+            x = point.getX()/2.54;
+            y = point.getY()/2.54;
+            pointsInInches.add(new Point2D(x, y));
+        }
+        point2DList = pointsInInches;
+    }
+
+    public XYChart.Series convertToXYChartSeries() {
+        XYChart.Series series = new XYChart.Series();
+        for (Point2D point : point2DList) {
+            series.getData().add(new XYChart.Data(point.getX(), point.getY()));
+        }
+        return series;
     }
 
     public List<Point2D> translate(double x, double y) {

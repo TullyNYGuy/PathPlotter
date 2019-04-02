@@ -14,6 +14,18 @@ public class LogFileReader {
     // getter and setter methods
     //*********************************************************************************************
     private String filePath = null;
+    private ActualMovementList actualMovementList;
+
+    //*********************************************************************************************
+    //          GETTER and SETTER Methods
+    //
+    // allow access to private data fields for example setMotorPower,
+    // getPositionInTermsOfAttachment
+    //*********************************************************************************************
+
+    public ActualMovementList getActualMovementList() {
+        return actualMovementList;
+    }
 
     //*********************************************************************************************
     //          Constructors
@@ -23,7 +35,7 @@ public class LogFileReader {
     //*********************************************************************************************
     public LogFileReader(String file) {
         this.filePath = file;
-
+        actualMovementList = new ActualMovementList();
     }
 
     //*********************************************************************************************
@@ -74,6 +86,7 @@ public class LogFileReader {
                                             break;
                                         case "INITIAL_HEADING_DISTANCE":
                                             driveStraightUsingIMUActual = new ActualMovement();
+                                            driveStraightUsingIMUActual.setMovementType(ActualMovement.MovementType.DRIVE_STRAIGHT_USING_IMU);
                                             driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             break;
                                         case "HEADING_DISTANCE":
@@ -82,6 +95,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING_DISTANCE":
                                             driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             // add this to the list of movements
+                                            actualMovementList.add(driveStraightUsingIMUActual);
                                             break;
                                     }
                                 }
@@ -95,6 +109,7 @@ public class LogFileReader {
                                             break;
                                         case "INITIAL_HEADING_DISTANCE":
                                             driveCurve = new ActualMovement();
+                                            driveCurve.setMovementType(ActualMovement.MovementType.CURVE);
                                             driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             break;
                                         case "HEADING_DISTANCE_RATE":
@@ -103,6 +118,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING_DISTANCE":
                                             driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             // add this to the list of movements
+                                            actualMovementList.add(driveCurve);
                                             break;
                                     }
                                 }
@@ -116,6 +132,7 @@ public class LogFileReader {
                                             break;
                                         case "INITIAL_HEADING":
                                             spinTurn = new ActualMovement();
+                                            spinTurn.setMovementType(ActualMovement.MovementType.SPIN_TURN);
                                             spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
                                             break;
                                         case "HEADING_CORRECTION":
@@ -124,6 +141,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING":
                                             spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
                                             // add this to the list of movements
+                                            actualMovementList.add(spinTurn);
                                             break;
                                     }
                                 }

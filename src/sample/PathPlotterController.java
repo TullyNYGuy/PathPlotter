@@ -51,6 +51,10 @@ public class PathPlotterController implements Initializable {
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
         logFileReader.readLogFile();
+        Point2DList point2DList =  logFileReader.getActualMovementList().getAllHeadingDistancePoints().convertToXY();
+        point2DList.toInches();
+        XYChart.Series series = point2DList.convertToXYChartSeries();
+        scatterChart.getData().addAll(series);
     }
 
     @FXML

@@ -47,6 +47,13 @@ public class HeadingDistancePointList {
         headingDistancePointList.add(headingDistancePoint);
     }
 
+    public void add(HeadingDistancePointList secondHeadingDistancePointList){
+        List<HeadingDistancePoint> bothLists = new ArrayList<>();
+        bothLists.addAll(this.headingDistancePointList);
+        bothLists.addAll(secondHeadingDistancePointList.getHeadingDistancePointList());
+        headingDistancePointList = bothLists;
+    }
+
     public Point2DList convertToXY() {
         double heading;
         double distance;

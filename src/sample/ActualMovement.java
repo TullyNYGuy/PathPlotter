@@ -38,6 +38,10 @@ public class ActualMovement {
         this.movementType = movementType;
     }
 
+    public HeadingDistancePointList getHeadingDistancePointList() {
+        return headingDistancePointList;
+    }
+
     //*********************************************************************************************
     //          Constructors
     //
