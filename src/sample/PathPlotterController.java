@@ -53,6 +53,10 @@ public class PathPlotterController implements Initializable {
         logFileReader.readLogFile();
         Point2DList point2DList =  logFileReader.getActualMovementList().getAllHeadingDistancePoints().convertToXY();
         point2DList.toInches();
+        // translate x= 20.63
+        // translate y = -1.889
+        point2DList.translate(20.63, -1.889);
+        point2DList.rotate(135);
         XYChart.Series series = point2DList.convertToXYChartSeries();
         scatterChart.getData().addAll(series);
     }
@@ -88,7 +92,7 @@ public class PathPlotterController implements Initializable {
 
     @FXML
     private void onExitSelected() {
-        System.out.println("exit selected");
+        closeProgram();
     }
 
     @FXML
@@ -132,6 +136,9 @@ public class PathPlotterController implements Initializable {
         scatterChart.setStyle("-fx-background-color: transparent;");
         // Use a read in jpg as the background. Make sure to remove the css that set that background before using this.
         //scatterChart.setBackground(setFieldAsBackground());
+
+        // this crashes the compile
+        //this.stage.setOnCloseRequest(e -> closeProgram());
 
         scatterChart.setOnMouseMoved( new EventHandler<MouseEvent>() {
             @Override
@@ -212,6 +219,10 @@ public class PathPlotterController implements Initializable {
         );
         fileList = fileChooser.showOpenMultipleDialog(stage);
         return fileList;
+    }
+
+    private void closeProgram() {
+        this.stage.close();
     }
 
     private List<Point2D> populateListPoints() {

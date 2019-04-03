@@ -35,7 +35,7 @@ public class Point2DList {
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
-    public Point2DList (){
+    public Point2DList() {
         point2DList = new ArrayList<>();
     }
 
@@ -45,8 +45,8 @@ public class Point2DList {
     //
     // public methods that give the class its functionality
     //*********************************************************************************************
-    public void add(Point2D point2D){
-       point2DList.add(point2D);
+    public void add(Point2D point2D) {
+        point2DList.add(point2D);
     }
 
     public void toInches() {
@@ -54,8 +54,8 @@ public class Point2DList {
         double y;
         List<Point2D> pointsInInches = new ArrayList<>();
         for (Point2D point : point2DList) {
-            x = point.getX()/2.54;
-            y = point.getY()/2.54;
+            x = point.getX() / 2.54;
+            y = point.getY() / 2.54;
             pointsInInches.add(new Point2D(x, y));
         }
         point2DList = pointsInInches;
@@ -69,11 +69,17 @@ public class Point2DList {
         return series;
     }
 
-    public List<Point2D> translate(double x, double y) {
-        return point2DList;
+    public void translate(double x, double y) {
+        List<Point2D> translatedPoints = new ArrayList<>();
+        Point2D translatedPoint;
+        for (Point2D point : point2DList) {
+            translatedPoint = point.add(x, y);
+            translatedPoints.add(translatedPoint);
+        }
+        point2DList = translatedPoints;
     }
 
-    public List<Point2D> rotate(double angle) {
+    public void rotate(double angle) {
         List<Point2D> rotatedPoints = new ArrayList<Point2D>();
         Rotate rotate = new Rotate();
         rotate.setAngle(angle);
@@ -84,6 +90,6 @@ public class Point2DList {
             Point2D rotatedPoint = rotate.transform(point.getX(), point.getY());
             rotatedPoints.add(rotatedPoint);
         }
-        return rotatedPoints;
+        point2DList = rotatedPoints;
     }
 }
