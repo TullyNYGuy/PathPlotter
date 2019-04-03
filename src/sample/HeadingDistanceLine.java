@@ -13,6 +13,7 @@ public class HeadingDistanceLine {
 
     private double heading;
     private double distance;
+    private Point2DList point2DList;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -21,7 +22,13 @@ public class HeadingDistanceLine {
     // getPositionInTermsOfAttachment
     //*********************************************************************************************
 
+    public Point2DList getPoint2DList() {
+        return point2DList;
+    }
 
+    public double getHeading() {
+        return heading;
+    }
 
     //*********************************************************************************************
     //          Constructors
@@ -33,6 +40,7 @@ public class HeadingDistanceLine {
     public HeadingDistanceLine(double heading, double distance){
         this.heading = heading;
         this.distance = distance;
+        convertToXY();
     }
 
     //*********************************************************************************************
@@ -51,16 +59,15 @@ public class HeadingDistanceLine {
         return maximumX;
     }
 
-    public Point2DList convertToXY(){
+    private void convertToXY(){
         double y;
-        Point2DList point2DList = new Point2DList();
+        point2DList = new Point2DList();
         for (double x = 0; x < maximumX(); x = x + maximumX() / 25){
             y = Math.tan(Math.toRadians(heading))*x;
             point2DList.add(new Point2D(x,y));
         }
         y = Math.tan(Math.toRadians(heading))*maximumX();
         point2DList.add(new Point2D(maximumX(),y));
-        return point2DList;
     }
 
 }

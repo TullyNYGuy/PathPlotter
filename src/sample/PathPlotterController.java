@@ -102,7 +102,7 @@ public class PathPlotterController implements Initializable {
     private void onTestDesiredLineSelected() {
         XYChart.Series series;
         HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100);
-        series = populateSeriesFromListOfPoints(headingDistanceLine.convertToXY().getPoint2DList());
+        series = headingDistanceLine.getPoint2DList().convertToXYChartSeries();
         scatterChart.getData().addAll(series);
     }
 
