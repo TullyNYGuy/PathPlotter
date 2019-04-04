@@ -29,6 +29,7 @@ public class Curve {
     private double initialHeading = 0;
     private double finalHeading = 0;
     private double radius = 0;
+    private Point2D center;
     private RotationDirection rotationDirection = RotationDirection.CW;
     private DriveDirection driveDirection = DriveDirection.FORWARDS;
     private Point2DList point2DList;
@@ -60,6 +61,8 @@ public class Curve {
         this.finalHeading = finalHeading;
         this.rotationDirection = rotationDirection;
         this.driveDirection = driveDirection;
+        center = getCenter();
+        convertToXY();
     }
 
     //*********************************************************************************************
@@ -68,10 +71,77 @@ public class Curve {
     // public methods that give the class its functionality
     //*********************************************************************************************
 
-    //private Point2D getCenter() {
-    //}
+    private Point2D getCenter() {
+        double x = 0;
+        double y = 0;
+        switch (rotationDirection) {
+            case CCW:
+                switch (driveDirection) {
+                    case FORWARDS:
+                        x = radius * Math.cos(Math.toRadians(90 - initialHeading));
+                        y = -radius * Math.sin(Math.toRadians(90 - initialHeading));
+                        break;
+                    case BACKWARDS:
+                        x = radius * Math.cos(Math.toRadians(-90 - initialHeading));
+                        y = -radius * Math.sin(Math.toRadians(-90 - initialHeading));
+                        break;
+                }
+                break;
+            case CW:
+                switch (driveDirection) {
+                    case FORWARDS:
+                        x = -radius * Math.cos(Math.toRadians(90 - initialHeading));
+                        y = radius * Math.sin(Math.toRadians(90 - initialHeading));
+                        break;
+                    case BACKWARDS:
+                        x = -radius * Math.cos(Math.toRadians(-90 - initialHeading));
+                        y = radius * Math.sin(Math.toRadians(-90 - initialHeading));
+                        break;
+                }
+                break;
+        }
+        return new Point2D(x, y);
+    }
+
+    private Point2D getPointOnCurve(double heading) {
+        double x = 0;
+        double y = 0;
+        switch (rotationDirection) {
+            case CCW:
+                switch (driveDirection) {
+                    case FORWARDS:
+                        x = center.getX() + radius * Math.cos(Math.toRadians(90 - heading));
+                        y = center.getY() - radius * Math.sin(Math.toRadians(90 - heading));
+                        break;
+                    case BACKWARDS:
+                        x = center.getX() + radius * Math.cos(Math.toRadians(-90 - heading));
+                        y = center.getY() - radius * Math.sin(Math.toRadians(-90 - heading));
+                        break;
+                }
+                break;
+            case CW:
+                switch (driveDirection) {
+                    case FORWARDS:
+                        x = center.getX() - radius * Math.cos(Math.toRadians(90 - heading));
+                        y = center.getY() + radius * Math.sin(Math.toRadians(90 - heading));
+                        break;
+                    case BACKWARDS:
+                        x = center.getX() - radius * Math.cos(Math.toRadians(-90 - heading));
+                        y = center.getY() + radius * Math.sin(Math.toRadians(-90 - heading));
+                        break;
+                }
+                break;
+        }
+        return new Point2D(x, y);
+    }
 
     private void convertToXY() {
-
+        double heading = initialHeading;
+        double headingChange = finalHeading - initialHeading;
+        for (int i = 0; i < 20; i++) {
+            heading = initialHeading + headingChange / i;
+            point2DList.add(getPointOnCurve(heading));
+        }
+        point2DList.add(getPointOnCurve(finalHeading));
     }
 }
