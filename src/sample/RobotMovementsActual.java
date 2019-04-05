@@ -9,20 +9,32 @@ import java.util.List;
 
 public class RobotMovementsActual {
 
-
-    public enum MovementType{
+    public enum MovementType {
         CURVE,
         DRIVE_STRAIGHT_USING_IMU,
         SPIN_TURN
     }
+
     //*********************************************************************************************
     //          PRIVATE DATA FIELDS
     //
     // can be accessed only by this class, or by using the public
     // getter and setter methods
     //*********************************************************************************************
-    private HeadingDistancePointList headingDistancePointList;
+
     private MovementType movementType;
+
+    /**
+     * Holds a description of the movement in form of a list of heading, distance points.
+     */
+    private HeadingDistancePointList headingDistancePointList;
+
+
+    /**
+     * Holds a description of the movement in the form of a list of x, y points (Point2D).
+     * This list is converted from the heading, distance points.
+     */
+    private Point2DList point2DList;
 
 
     //*********************************************************************************************
@@ -32,7 +44,6 @@ public class RobotMovementsActual {
     // getPositionInTermsOfAttachment
     //*********************************************************************************************
 
-
     public MovementType getMovementType() {
         return movementType;
     }
@@ -41,22 +52,42 @@ public class RobotMovementsActual {
         this.movementType = movementType;
     }
 
+    /**
+     * Convert the list of headingDistancePoints (heading, distance) to a list of Point2D (x, y) and return the list.
+     *
+     * @return
+     */
+    public Point2DList getPoint2DList() {
+        // convert to a list of Point2D (x,y) and store the list
+        point2DList = headingDistancePointList.convertToXY();
+        // return the list
+        return point2DList;
+    }
+
+    // SHOULD ADD A METHOD TO GET THE LAST X AND LAST Y VALUES FOR THIS MOVEMENT
+
     //*********************************************************************************************
     //          Constructors
     //
     // the function that builds the class when an object is created
     // from it
     //*********************************************************************************************
+
     public RobotMovementsActual() {
         headingDistancePointList = new HeadingDistancePointList();
     }
-
 
     //*********************************************************************************************
     //          MAJOR METHODS
     //
     // public methods that give the class its functionality
     //*********************************************************************************************
+
+    /**
+     * Add a headingDistancePoint to the list.
+     *
+     * @param headingDistancePoint
+     */
     public void add(HeadingDistancePoint headingDistancePoint) {
         headingDistancePointList.add(headingDistancePoint);
     }
@@ -66,6 +97,7 @@ public class RobotMovementsActual {
     //
     // public methods that give the class its functionality
     //*********************************************************************************************
+
     public void createTestData() {
         headingDistancePointList.add(new HeadingDistancePoint(.6875, 0.0));
         headingDistancePointList.add(new HeadingDistancePoint(0.6875, 0.11880819366852886));
@@ -90,7 +122,8 @@ public class RobotMovementsActual {
         headingDistancePointList.add(new HeadingDistancePoint(0.5, 15.445065176908752));
         headingDistancePointList.add(new HeadingDistancePoint(0.75, 16.48463687150838));
     }
-    public XYChart.Series convertHeadingDistanceToXYChartSeries(){
+
+    public XYChart.Series convertHeadingDistanceToXYChartSeries() {
         Point2DList point2DList = headingDistancePointList.convertToXY();
         XYChart.Series xyChartSeries = point2DList.convertToXYChartSeries();
         return xyChartSeries;
