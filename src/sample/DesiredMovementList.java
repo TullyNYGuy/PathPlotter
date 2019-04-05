@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.scene.chart.XYChart;
+
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class DesiredMovementList {
     //*********************************************************************************************
 
     private List<DesiredMovement> desiredMovementList;
+    private Point2DList point2DList;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -37,6 +41,21 @@ public class DesiredMovementList {
 
     public DesiredMovementList() {
         desiredMovementList = new ArrayList<>();
+        point2DList = new Point2DList();
+    }
+
+
+    //*********************************************************************************************
+    //          INTERNAL PRIVATE METHODS
+    //
+    // private methods that the class uses
+    //*********************************************************************************************
+
+    private void combineAllMovementsToPoint2DList() {
+        point2DList = desiredMovementList.get(0).getPoint2DList();
+        for (int i =1; i< desiredMovementList.size(); i++) {
+            point2DList.addWithTranslate(desiredMovementList.get(i).getPoint2DList());
+        }
     }
 
     //*********************************************************************************************
@@ -49,11 +68,17 @@ public class DesiredMovementList {
         desiredMovementList.add(desiredMovement);
     }
 
-    public HeadingDistancePointList getAllHeadingDistancePoints(){
-        HeadingDistancePointList allHeadingDistancePoints = new HeadingDistancePointList();
-        for(DesiredMovement desiredMovement : desiredMovementList) {
-            //allHeadingDistancePoints.add(desiredMovement.getHeadingDistancePointList());
-        }
-        return allHeadingDistancePoints;
+
+    public XYChart.Series getXYChartSeries(double xShift, double yshift, double rotateAngle) {
+        // add all of the movements to one another to get a single Point2DList
+        combineAllMovementsToPoint2DList();
+        // convert the list to inches
+        point2DList.toInches();
+        // translate the list
+        point2DList.translate(xShift, yshift);
+        // rotate the list
+        point2DList.rotate(rotateAngle);
+        // convert the Point2D list to XYChart.Series
+        return point2DList.convertToXYChartSeries();
     }
 }

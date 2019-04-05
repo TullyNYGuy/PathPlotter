@@ -70,4 +70,8 @@ public class HeadingDistanceLine {
         point2DList.add(new Point2D(maximumX(),y));
     }
 
+    public Point2D getLastPoint() {
+        return point2DList.getLastPoint();
+    }
+
 }

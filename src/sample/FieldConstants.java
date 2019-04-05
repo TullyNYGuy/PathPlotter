@@ -1,8 +1,6 @@
 package sample;
 
-import javafx.geometry.Point2D;
-
-public class DesiredMovement {
+public class FieldConstants {
 
     //*********************************************************************************************
     //          ENUMERATED TYPES
@@ -11,10 +9,11 @@ public class DesiredMovement {
     //
     //*********************************************************************************************
 
-    public enum MovementType {
-        CURVE,
-        LINE,
-        SPIN_TURN
+    public enum StartLocation {
+        CRATER_SIDE_RED,
+        DEPOT_SIDE_RED,
+        CRATER_SIDE_BLUE,
+        DEPOT_SIDE_BLUE
     }
 
     //*********************************************************************************************
@@ -24,9 +23,8 @@ public class DesiredMovement {
     // getter and setter methods
     //*********************************************************************************************
 
-    private HeadingDistanceLine headingDistanceLine;
-    private Curve curve;
-    private MovementType movementType;
+    static double xTranslate = 20.63;
+    static double yTranslate = -1.889;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -42,23 +40,7 @@ public class DesiredMovement {
     // from it
     //*********************************************************************************************
 
-    public DesiredMovement(Curve curve){
-        this.curve = curve;
-    }
-
-    public DesiredMovement(HeadingDistanceLine headingDistanceLine) {
-        this.headingDistanceLine = headingDistanceLine;
-    }
-
-    public DesiredMovement(double radius, double initialHeading, double finalHeading, Curve.RotationDirection rotationDirection, Curve.DriveDirection driveDirection) {
-        this.movementType = MovementType.CURVE;
-        this.curve = new Curve(radius, initialHeading, finalHeading, rotationDirection, driveDirection);
-    }
-
-    public DesiredMovement(double heading, double distance) {
-        this.movementType = MovementType.LINE;
-        this.headingDistanceLine = new HeadingDistanceLine(heading, distance);
-    }
+    public FieldConstants() {}
 
     //*********************************************************************************************
     //          MAJOR METHODS
@@ -66,33 +48,22 @@ public class DesiredMovement {
     // public methods that give the class its functionality
     //*********************************************************************************************
 
-    public Point2D getLastPoint() {
-        Point2D lastPoint = null;
-        switch (movementType) {
-            case CURVE:
-                lastPoint = curve.getLastPoint();
+    public static double getRotationAngleForStartPosition (StartLocation startLocation) {
+        double angle = 0;
+        switch (startLocation) {
+            case CRATER_SIDE_RED:
+                angle = 135;
                 break;
-            case LINE:
-                lastPoint = headingDistanceLine.getLastPoint();
+            case DEPOT_SIDE_RED:
+                angle = 225;
                 break;
-            case SPIN_TURN:
+            case CRATER_SIDE_BLUE:
+                angle = 305;
                 break;
-        }
-        return lastPoint;
-    }
-
-    public Point2DList getPoint2DList() {
-        Point2DList point2DList = null;
-        switch (movementType) {
-            case CURVE:
-                point2DList = curve.getPoint2DList();
-                break;
-            case LINE:
-                point2DList = headingDistanceLine.getPoint2DList();
-                break;
-            case SPIN_TURN:
+            case DEPOT_SIDE_BLUE:
+                angle = 45;
                 break;
         }
-        return point2DList;
+        return angle;
     }
 }

@@ -50,15 +50,9 @@ public class PathPlotterController implements Initializable {
         logFile = chooseSingleLog();
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
-        logFileReader.readLogFile();
-        Point2DList point2DList =  logFileReader.getActualMovementList().getAllHeadingDistancePoints().convertToXY();
-        point2DList.toInches();
-        // translate x= 20.63
-        // translate y = -1.889
-        point2DList.translate(20.63, -1.889);
-        point2DList.rotate(135);
-        XYChart.Series series = point2DList.convertToXYChartSeries();
-        scatterChart.getData().addAll(series);
+        scatterChart.getData().addAll(logFileReader.getActualMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
+        scatterChart.getData().addAll(logFileReader.getDesiredMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
+
     }
 
     @FXML

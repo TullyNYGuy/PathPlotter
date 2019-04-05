@@ -26,6 +26,7 @@ public class Curve {
     // can be accessed only by this class, or by using the public
     // getter and setter methods
     //*********************************************************************************************
+
     private double initialHeading = 0;
     private double finalHeading = 0;
     private double radius = 0;
@@ -56,12 +57,13 @@ public class Curve {
     // from it
     //*********************************************************************************************
 
-    public Curve(double initialHeading, double finalHeading, RotationDirection rotationDirection, DriveDirection driveDirection) {
+    public Curve(double radius, double initialHeading, double finalHeading, RotationDirection rotationDirection, DriveDirection driveDirection) {
+        this.radius = radius;
         this.initialHeading = initialHeading;
         this.finalHeading = finalHeading;
         this.rotationDirection = rotationDirection;
         this.driveDirection = driveDirection;
-        center = getCenter();
+        getCenter();
         convertToXY();
     }
 
@@ -71,7 +73,7 @@ public class Curve {
     // public methods that give the class its functionality
     //*********************************************************************************************
 
-    private Point2D getCenter() {
+    private void getCenter() {
         double x = 0;
         double y = 0;
         switch (rotationDirection) {
@@ -100,7 +102,7 @@ public class Curve {
                 }
                 break;
         }
-        return new Point2D(x, y);
+        center = new Point2D(x, y);
     }
 
     private Point2D getPointOnCurve(double heading) {
@@ -143,5 +145,9 @@ public class Curve {
             point2DList.add(getPointOnCurve(heading));
         }
         point2DList.add(getPointOnCurve(finalHeading));
+    }
+
+    public Point2D getLastPoint() {
+        return point2DList.getLastPoint();
     }
 }
