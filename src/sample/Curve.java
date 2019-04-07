@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.chart.XYChart;
 
 public class Curve {
 
@@ -16,8 +17,8 @@ public class Curve {
     }
 
     public enum DriveDirection {
-        BACKWARDS,
-        FORWARDS
+        BACKWARD,
+        FORWARD
     }
 
     //*********************************************************************************************
@@ -32,7 +33,7 @@ public class Curve {
     private double radius = 0;
     private Point2D center;
     private RotationDirection rotationDirection = RotationDirection.CW;
-    private DriveDirection driveDirection = DriveDirection.FORWARDS;
+    private DriveDirection driveDirection = DriveDirection.FORWARD;
     private Point2DList point2DList;
 
     //*********************************************************************************************
@@ -63,6 +64,7 @@ public class Curve {
         this.finalHeading = finalHeading;
         this.rotationDirection = rotationDirection;
         this.driveDirection = driveDirection;
+        point2DList = new Point2DList();
         getCenter();
         convertToXY();
     }
@@ -79,25 +81,25 @@ public class Curve {
         switch (rotationDirection) {
             case CCW:
                 switch (driveDirection) {
-                    case FORWARDS:
-                        x = radius * Math.cos(Math.toRadians(90 - initialHeading));
-                        y = -radius * Math.sin(Math.toRadians(90 - initialHeading));
+                    case FORWARD:
+                        x = -radius * Math.cos(Math.toRadians(90 - initialHeading));
+                        y = +radius * Math.sin(Math.toRadians(90 - initialHeading));
                         break;
-                    case BACKWARDS:
-                        x = radius * Math.cos(Math.toRadians(-90 - initialHeading));
-                        y = -radius * Math.sin(Math.toRadians(-90 - initialHeading));
+                    case BACKWARD:
+                        x = -radius * Math.cos(Math.toRadians(-90 - initialHeading));
+                        y = +radius * Math.sin(Math.toRadians(-90 - initialHeading));
                         break;
                 }
                 break;
             case CW:
                 switch (driveDirection) {
-                    case FORWARDS:
-                        x = -radius * Math.cos(Math.toRadians(90 - initialHeading));
-                        y = radius * Math.sin(Math.toRadians(90 - initialHeading));
+                    case FORWARD:
+                        x = +radius * Math.cos(Math.toRadians(90 - initialHeading));
+                        y = -radius * Math.sin(Math.toRadians(90 - initialHeading));
                         break;
-                    case BACKWARDS:
-                        x = -radius * Math.cos(Math.toRadians(-90 - initialHeading));
-                        y = radius * Math.sin(Math.toRadians(-90 - initialHeading));
+                    case BACKWARD:
+                        x = +radius * Math.cos(Math.toRadians(-90 - initialHeading));
+                        y = -radius * Math.sin(Math.toRadians(-90 - initialHeading));
                         break;
                 }
                 break;
@@ -111,11 +113,11 @@ public class Curve {
         switch (rotationDirection) {
             case CCW:
                 switch (driveDirection) {
-                    case FORWARDS:
+                    case FORWARD:
                         x = center.getX() + radius * Math.cos(Math.toRadians(90 - heading));
                         y = center.getY() - radius * Math.sin(Math.toRadians(90 - heading));
                         break;
-                    case BACKWARDS:
+                    case BACKWARD:
                         x = center.getX() + radius * Math.cos(Math.toRadians(-90 - heading));
                         y = center.getY() - radius * Math.sin(Math.toRadians(-90 - heading));
                         break;
@@ -123,11 +125,11 @@ public class Curve {
                 break;
             case CW:
                 switch (driveDirection) {
-                    case FORWARDS:
+                    case FORWARD:
                         x = center.getX() - radius * Math.cos(Math.toRadians(90 - heading));
                         y = center.getY() + radius * Math.sin(Math.toRadians(90 - heading));
                         break;
-                    case BACKWARDS:
+                    case BACKWARD:
                         x = center.getX() - radius * Math.cos(Math.toRadians(-90 - heading));
                         y = center.getY() + radius * Math.sin(Math.toRadians(-90 - heading));
                         break;
@@ -140,8 +142,9 @@ public class Curve {
     private void convertToXY() {
         double heading = initialHeading;
         double headingChange = finalHeading - initialHeading;
-        for (int i = 0; i < 20; i++) {
-            heading = initialHeading + headingChange / i;
+        int numberOfPoints = 20;
+        for (int i = 0; i < numberOfPoints; i++) {
+            heading = initialHeading + headingChange * i / numberOfPoints;
             point2DList.add(getPointOnCurve(heading));
         }
         point2DList.add(getPointOnCurve(finalHeading));
@@ -150,4 +153,15 @@ public class Curve {
     public Point2D getLastPoint() {
         return point2DList.getLastPoint();
     }
+
+    public XYChart.Series getXYChartSeries() {
+        return point2DList.convertToXYChartSeries();
+    }
+
+    public  XYChart.Series getXYChartSeriesTest() {
+        XYChart.Series testSeries = point2DList.convertToXYChartSeries();
+        testSeries.getData().add(new XYChart.Data(center.getX(), center.getY()));
+        return testSeries;
+    }
+
 }

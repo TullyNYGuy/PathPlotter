@@ -51,7 +51,7 @@ public class PathPlotterController implements Initializable {
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
         scatterChart.getData().addAll(logFileReader.getActualMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
-        scatterChart.getData().addAll(logFileReader.getDesiredMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
+        scatterChart.getData().addAll(logFileReader.getDesiredMovementList().getXYChartSeries(0,0,0));
 
     }
 
@@ -95,8 +95,19 @@ public class PathPlotterController implements Initializable {
     @FXML
     private void onTestDesiredLineSelected() {
         XYChart.Series series;
-        HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100);
-        series = headingDistanceLine.getPoint2DList().convertToXYChartSeries();
+        HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100, HeadingDistanceLine.DriveDirection.FORWARD);
+        series = headingDistanceLine.getXYChartSeries();
+        scatterChart.getData().addAll(series);
+    }
+
+    @FXML
+    private MenuItem testDesiredCurve;
+
+    @FXML
+    private void onTestDesiredCurveSelected() {
+        XYChart.Series series;
+        Curve curve = new Curve(40, -135, 180, Curve.RotationDirection.CW, Curve.DriveDirection.BACKWARD);
+        series = curve.getXYChartSeriesTest();
         scatterChart.getData().addAll(series);
     }
 

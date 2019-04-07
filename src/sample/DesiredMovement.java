@@ -55,9 +55,9 @@ public class DesiredMovement {
         this.curve = new Curve(radius, initialHeading, finalHeading, rotationDirection, driveDirection);
     }
 
-    public DesiredMovement(double heading, double distance) {
+    public DesiredMovement(double heading, double distance, HeadingDistanceLine.DriveDirection driveDirection) {
         this.movementType = MovementType.LINE;
-        this.headingDistanceLine = new HeadingDistanceLine(heading, distance);
+        this.headingDistanceLine = new HeadingDistanceLine(heading, distance, driveDirection);
     }
 
     //*********************************************************************************************
@@ -94,5 +94,20 @@ public class DesiredMovement {
                 break;
         }
         return point2DList;
+    }
+
+    public double getFinalHeading() {
+        double finalHeading = 0;
+        switch (movementType) {
+            case CURVE:
+                finalHeading = curve.getFinalHeading();
+                break;
+            case LINE:
+                finalHeading = headingDistanceLine.getHeading();
+                break;
+            case SPIN_TURN:
+                break;
+        }
+        return finalHeading;
     }
 }

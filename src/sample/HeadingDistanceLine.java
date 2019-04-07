@@ -1,8 +1,14 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.chart.XYChart;
 
 public class HeadingDistanceLine {
+
+    public enum DriveDirection {
+        BACKWARD,
+        FORWARD
+    }
 
     //*********************************************************************************************
     //          PRIVATE DATA FIELDS
@@ -14,6 +20,7 @@ public class HeadingDistanceLine {
     private double heading;
     private double distance;
     private Point2DList point2DList;
+    private DriveDirection driveDirection;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -37,9 +44,10 @@ public class HeadingDistanceLine {
     // from it
     //*********************************************************************************************
 
-    public HeadingDistanceLine(double heading, double distance){
+    public HeadingDistanceLine(double heading, double distance, DriveDirection driveDirection){
         this.heading = heading;
         this.distance = distance;
+        this.driveDirection = driveDirection;
         convertToXY();
     }
 
@@ -62,16 +70,31 @@ public class HeadingDistanceLine {
     private void convertToXY(){
         double y;
         point2DList = new Point2DList();
-        for (double x = 0; x < maximumX(); x = x + maximumX() / 25){
-            y = Math.tan(Math.toRadians(heading))*x;
-            point2DList.add(new Point2D(x,y));
+        if (driveDirection == DriveDirection.FORWARD) {
+            for (double x = 0; x < maximumX(); x = x + maximumX() / 25){
+                y = Math.tan(Math.toRadians(heading))*x;
+                point2DList.add(new Point2D(x,y));
+            }
+            y = Math.tan(Math.toRadians(heading))*maximumX();
+            point2DList.add(new Point2D(maximumX(),y));
+        } else {
+            // driving backwards
+            for (double x = 0; x > -maximumX(); x = x - maximumX() / 25){
+                y = Math.tan(Math.toRadians(heading))*x;
+                point2DList.add(new Point2D(x,y));
+            }
+            y = Math.tan(Math.toRadians(heading))*-maximumX();
+            point2DList.add(new Point2D(-maximumX(),y));
         }
-        y = Math.tan(Math.toRadians(heading))*maximumX();
-        point2DList.add(new Point2D(maximumX(),y));
+
     }
 
     public Point2D getLastPoint() {
         return point2DList.getLastPoint();
+    }
+
+    public XYChart.Series getXYChartSeries() {
+        return point2DList.convertToXYChartSeries();
     }
 
 }

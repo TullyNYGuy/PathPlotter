@@ -59,11 +59,12 @@ public class LogFileReader {
         String value;
         double heading;
         double distance;
+        HeadingDistanceLine.DriveDirection driveDirectionLine;
         double radius;
         double initialHeading;
         double finalHeading;
         Curve.RotationDirection rotationDirection;
-        Curve.DriveDirection driveDirection;
+        Curve.DriveDirection driveDirectionCurve;
         Scanner scannerFile = null;
         Scanner scannerLine = null;
         ActualMovement driveStraightUsingIMUActual = null;
@@ -113,7 +114,13 @@ public class LogFileReader {
                                             // =
                                             scannerLine.next();
                                             distance = scannerLine.nextDouble();
-                                            desiredMovementList.add(new DesiredMovement(heading, distance));
+                                            // drive_direction
+                                            scannerLine.next();
+                                            // =
+                                            scannerLine.next();
+                                            // FORWARD
+                                            driveDirectionLine = HeadingDistanceLine.DriveDirection.valueOf(scannerLine.next());
+                                            desiredMovementList.add(new DesiredMovement(heading, distance, driveDirectionLine));
                                             break;
                                         case "INITIAL_HEADING_DISTANCE":
                                             driveStraightUsingIMUActual = new ActualMovement();
@@ -166,8 +173,9 @@ public class LogFileReader {
                                             // =
                                             scannerLine.next();
                                             // BACKWARD
-                                            driveDirection = Curve.DriveDirection.valueOf(scannerLine.next());
-                                            desiredMovementList.add(new DesiredMovement(radius, 0, finalHeading, rotationDirection, driveDirection));
+                                            driveDirectionCurve = Curve.DriveDirection.valueOf(scannerLine.next());
+                                            initialHeading = desiredMovementList.getFinalHeading();
+                                            desiredMovementList.add(new DesiredMovement(radius, initialHeading, finalHeading, rotationDirection, driveDirectionCurve));
                                             break;
                                         case "INITIAL_HEADING_DISTANCE":
                                             driveCurve = new ActualMovement();

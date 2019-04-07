@@ -68,6 +68,18 @@ public class DesiredMovementList {
         desiredMovementList.add(desiredMovement);
     }
 
+    public double getFinalHeading() {
+        double finalHeading = 0;
+        int size = desiredMovementList.size();
+        if (size == 0) {
+            finalHeading = 0;
+        } else {
+            // get the last desired movement (remember this is 0 indexed so last is size -1
+            DesiredMovement lastDesiredMovement = desiredMovementList.get(size -1);
+            finalHeading = lastDesiredMovement.getFinalHeading();
+        }
+        return finalHeading;
+    }
 
     public XYChart.Series getXYChartSeries(double xShift, double yshift, double rotateAngle) {
         // add all of the movements to one another to get a single Point2DList
