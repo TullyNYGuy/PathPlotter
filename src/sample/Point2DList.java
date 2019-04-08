@@ -65,12 +65,12 @@ public class Point2DList {
      * @param secondPoint2DList
      * @return
      */
-    public Point2DList add(Point2DList secondPoint2DList){
-        List<Point2D> temporaryPoint2Dlist = new ArrayList<>();
-        temporaryPoint2Dlist.addAll(point2DList);
-        temporaryPoint2Dlist.addAll(secondPoint2DList.getPoint2DList());
-
-    }
+//    public Point2DList add(Point2DList secondPoint2DList){
+//        List<Point2D> temporaryPoint2Dlist = new ArrayList<>();
+//        temporaryPoint2Dlist.addAll(point2DList);
+//        temporaryPoint2Dlist.addAll(secondPoint2DList.getPoint2DList());
+//        return temporaryPoint2Dlist;
+//    }
 
     /**
      * Shift (translate) the list of Point2D by a x and y value. Shifts the points around the plot. Modifies the list
