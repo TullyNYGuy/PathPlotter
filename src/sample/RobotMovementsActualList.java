@@ -72,13 +72,13 @@ public class RobotMovementsActualList {
     /**
      * Create a complete continuous list of x,y points for all of the robot movements combined.
      */
-    public void createCompletePoint2DList(){
-        Point2DList completePoint2DList = new Point2DList();
-        Point2DList temporaryPoint2DList = new Point2DList();
-        for (RobotMovementsActual robotMovementsActual: robotMovementsActualList){
-            temporaryPoint2DList = robotMovementsActual.getPoint2DList();
-            temporaryPoint2DList.translate(lastX, lastY);
-            completePoint2DList.add();
-        }
-    }
+//    public void createCompletePoint2DList(){
+//        Point2DList completePoint2DList = new Point2DList();
+//        Point2DList temporaryPoint2DList = new Point2DList();
+//        for (RobotMovementsActual robotMovementsActual: robotMovementsActualList){
+//            temporaryPoint2DList = robotMovementsActual.getPoint2DList();
+//            temporaryPoint2DList.translate(lastX, lastY);
+//            completePoint2DList.add();
+//        }
+//    }
 }
