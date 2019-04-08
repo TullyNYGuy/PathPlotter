@@ -87,6 +87,19 @@ public class PathPlotterController implements Initializable {
     }
 
     @FXML
+    private MenuItem plotCenters;
+
+    @FXML
+    private void onPlotCentersSelected(){
+        XYChart.Series series;
+        Curve curve = new Curve(10,45,30, Curve.DriveDirection.BACKWARD, Curve.CurveDirection.CW);
+        scatterChart.getData().addAll(curve.getCenterAsSeries());
+
+        Curve curve2 = new Curve(10,45,45+15, Curve.DriveDirection.BACKWARD, Curve.CurveDirection.CCW);
+        scatterChart.getData().addAll(curve2.getCenterAsSeries());
+    }
+
+    @FXML
     private MenuItem testDesiredLine;
 
     @FXML

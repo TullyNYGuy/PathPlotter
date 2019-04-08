@@ -38,6 +38,7 @@
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onTestDesiredLineSelected" text="testDesiredLine" />
+                        <MenuItem fx:id="plotCenters" mnemonicParsing="false" onAction="#onPlotCentersSelected" text="Plot Centers" />
                         <MenuItem fx:id="plotHeadingPointList" mnemonicParsing="false" onAction="#onPlotHeadingPointList" text="Plot Heading Distance Point List Test" />
                     <MenuItem mnemonicParsing="false" text="Delete" />
                   </items>
