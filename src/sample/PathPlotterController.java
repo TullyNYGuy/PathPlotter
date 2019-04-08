@@ -106,7 +106,7 @@ public class PathPlotterController implements Initializable {
     @FXML
     private void onTestDesiredCurveSelected() {
         XYChart.Series series;
-        Curve curve = new Curve(40, -135, 180, Curve.RotationDirection.CW, Curve.DriveDirection.BACKWARD);
+        Curve curve = new Curve(40, -135, +45, Curve.RotationDirection.CCW, Curve.DriveDirection.BACKWARD);
         series = curve.getXYChartSeriesTest();
         scatterChart.getData().addAll(series);
     }
