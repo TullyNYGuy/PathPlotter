@@ -90,6 +90,14 @@ public class PathPlotterController implements Initializable {
     }
 
     @FXML
+    private MenuItem clear;
+
+    @FXML
+    private void onClearSelected() {
+        scatterChart.getData().clear();
+    }
+
+    @FXML
     private MenuItem testDesiredLine;
 
     @FXML
