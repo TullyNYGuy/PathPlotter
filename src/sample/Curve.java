@@ -183,32 +183,33 @@ public class Curve {
 
     private double getHeadingChange() {
         double headingChange = 0;
-        if ((initialHeading > 0 && finalHeading > 0) || initialHeading < 0 && finalHeading < 0) {
+        if ((initialHeading >= 0 && finalHeading >= 0) || (initialHeading <= 0 && finalHeading <= 0)) {
             // the headings start and end as positive headings or as negative heading.
             // no adjustement is needed
             headingChange = finalHeading - initialHeading;
-        } else {
-            // final and initial headings have different signs. Now we have to do some checking.
-            if (initialHeading > 0 && finalHeading < 0) {
-                if (rotationDirection == RotationDirection.CW) {
-                    // the rotation does not cross the -180 / +180 jump point
-                    headingChange = finalHeading = initialHeading;
-                } else {
-                    // the rotation DOES cross the -180 / + 180 jump point. Adjust the final heading to a 0-360 heading
-                    internalFinalHeading = 360 - finalHeading;
-                    headingChange = internalFinalHeading - initialHeading;
+        }
+        // final and initial headings have different signs. Now we have to do some checking.
+        if (initialHeading > 0 && finalHeading < 0) {
+            if (rotationDirection == RotationDirection.CW) {
+                // the rotation does not cross the -180 / +180 jump point
+                headingChange = finalHeading - initialHeading;
+            } else {
+                // the rotation DOES cross the -180 / + 180 jump point. Adjust the final heading to a 0-360 heading
+                internalFinalHeading = 360 + finalHeading;
+                headingChange = internalFinalHeading - initialHeading;
 
-                }
             }
-            if (initialHeading < 0 && finalHeading > 0) {
-                if (rotationDirection == RotationDirection.CW) {
-                    // the rotation DOES cross the -180 / + 180 jump point. Adjust the final heading to a 0-360 heading
-                    internalFinalHeading = 360 - finalHeading;
-                    headingChange = internalFinalHeading - initialHeading;
-                } else {
-                    // the rotation does not cross the -180 / +180 jump point
-                    headingChange = finalHeading = initialHeading;
-                }
+        }
+        if (initialHeading < 0 && finalHeading > 0) {
+            if (rotationDirection == RotationDirection.CW) {
+                // the rotation DOES cross the -180 / + 180 jump point. Adjust the final heading to a 0-360 heading
+                internalFinalHeading = finalHeading;
+                // adjust the intitial heading to a 0-360 heading
+                internalInitalHeading = 360 + initialHeading;
+                headingChange = internalFinalHeading - internalInitalHeading;
+            } else {
+                // the rotation does not cross the -180 / +180 jump point
+                headingChange = finalHeading - initialHeading;
             }
         }
         return headingChange;
