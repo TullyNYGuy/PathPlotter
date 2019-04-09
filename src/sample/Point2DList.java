@@ -52,6 +52,7 @@ public class Point2DList {
 
     /**
      * Add a Point2D to the list.
+     *
      * @param point2D
      */
     public void add(Point2D point2D) {
@@ -62,19 +63,21 @@ public class Point2DList {
 
     /**
      * Add a Point2DList to the list contained in this class.
+     *
      * @param secondPoint2DList
      * @return
      */
-//    public Point2DList add(Point2DList secondPoint2DList){
-//        List<Point2D> temporaryPoint2Dlist = new ArrayList<>();
-//        temporaryPoint2Dlist.addAll(point2DList);
-//        temporaryPoint2Dlist.addAll(secondPoint2DList.getPoint2DList());
-//        return temporaryPoint2Dlist;
-//    }
+    public void add(Point2DList secondPoint2DList) {
+        List<Point2D> temporaryPoint2Dlist = new ArrayList<>();
+        temporaryPoint2Dlist.addAll(point2DList);
+        temporaryPoint2Dlist.addAll(secondPoint2DList.getPoint2DList());
+        point2DList = temporaryPoint2Dlist;
+    }
 
     /**
      * Shift (translate) the list of Point2D by a x and y value. Shifts the points around the plot. Modifies the list
      * contained in this class. The original Point2D values are not retained.
+     *
      * @param x
      * @param y
      * @return
@@ -96,6 +99,7 @@ public class Point2DList {
     /**
      * Rotate the list of Point2D by an angle. Modified the list of Point2Ds contained in this class. The
      * original Point2D values are not retained.
+     *
      * @param angle
      * @return
      */
@@ -116,6 +120,7 @@ public class Point2DList {
 
     /**
      * Convert the list of Point2Ds into a XYChart.Series. This can be plotted using an XYChart object.
+     *
      * @return
      */
     public XYChart.Series convertToXYChartSeries() {
@@ -133,4 +138,20 @@ public class Point2DList {
         return series;
     }
 
+    public Point2D getLastPoint2D() {
+        return point2DList.get(point2DList.size() - 1);
+    }
+
+    public void toInches() {
+        double x;
+        double y;
+        Point2DList newPoint2DList = new Point2DList();
+
+        for (Point2D point : point2DList) {
+            x = point.getX() / 2.54;
+            y = point.getY() / 2.54;
+            newPoint2DList.add(new Point2D(x, y));
+        }
+        point2DList = newPoint2DList.getPoint2DList();
+    }
 }

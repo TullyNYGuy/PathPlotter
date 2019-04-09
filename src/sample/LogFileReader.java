@@ -96,6 +96,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING_DISTANCE":
                                             driveStraightUsingIMUActual.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             // add this to the list of movements
+                                            driveStraightUsingIMUActual.convertToXY();
                                             robotMovementActualList.add(driveStraightUsingIMUActual);
                                             break;
                                     }
@@ -119,6 +120,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING_DISTANCE":
                                             driveCurve.add(new HeadingDistancePoint(scannerLine.nextDouble(), scannerLine.nextDouble()));
                                             // add this to the list of movements
+                                            driveCurve.convertToXY();
                                            robotMovementActualList.add(driveCurve);
                                             break;
                                     }
@@ -142,6 +144,7 @@ public class LogFileReader {
                                         case "FINAL_HEADING":
                                             spinTurn.add(new HeadingDistancePoint(scannerLine.nextDouble(), 0.0));
                                             // add this to the list of movements
+                                            spinTurn.convertToXY();
                                             robotMovementActualList.add(spinTurn);
                                             break;
                                     }

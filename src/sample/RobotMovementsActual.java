@@ -92,6 +92,10 @@ public class RobotMovementsActual {
         headingDistancePointList.add(headingDistancePoint);
     }
 
+    public void convertToXY(){
+        headingDistancePointList.convertToXY();
+    }
+
     //*********************************************************************************************
     //          TEST METHODS
     //

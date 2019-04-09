@@ -17,7 +17,7 @@ public class HeadingDistancePointList {
      * Hold a list of points in the form of heading, distance
      */
     private List<HeadingDistancePoint> headingDistancePointList;
-
+    private Point2DList point2DList;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -39,6 +39,7 @@ public class HeadingDistancePointList {
 
     public HeadingDistancePointList() {
         headingDistancePointList = new ArrayList<>();
+        point2DList = new Point2DList();
     }
 
     //*********************************************************************************************
@@ -49,6 +50,7 @@ public class HeadingDistancePointList {
 
     /**
      * Add a single headingDistancePoint to the list
+     *
      * @param headingDistancePoint
      */
     public void add(HeadingDistancePoint headingDistancePoint) {
@@ -57,6 +59,7 @@ public class HeadingDistancePointList {
 
     /**
      * Convert the list of headingDistancePoints to a list of x,y points (Point2D)
+     *
      * @return
      */
     public Point2DList convertToXY() {
@@ -70,11 +73,12 @@ public class HeadingDistancePointList {
         point2DList.add(initialPoint);
         for (HeadingDistancePoint headingDistancePoint : headingDistancePointList) {
             heading = headingDistancePoint.getHeading();
-            distance = headingDistancePoint.getDistance()-firstPoint.getDistance();
-            x = distance*Math.cos(Math.toRadians(heading));
-            y = distance*Math.sin(Math.toRadians(heading));
-            point2DList.add(new Point2D(x,y));
+            distance = headingDistancePoint.getDistance() - firstPoint.getDistance();
+            x = distance * Math.cos(Math.toRadians(heading));
+            y = distance * Math.sin(Math.toRadians(heading));
+            point2DList.add(new Point2D(x, y));
         }
+        this.point2DList = point2DList;
         return point2DList;
     }
 }

@@ -50,6 +50,7 @@ public class PathPlotterController implements Initializable {
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
         logFileReader.readLogFile();
+        scatterChart.getData().addAll(logFileReader.getRobotMovementActualList().convertToXYChartSeries());
     }
 
     @FXML
