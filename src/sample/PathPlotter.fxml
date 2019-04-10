@@ -36,6 +36,7 @@
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
                         <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#onClearSelected" text="Clear" />
+                        <MenuItem fx:id="viewAll" mnemonicParsing="false" onAction="#onViewAllSelected" text="View All" />
                         <MenuItem mnemonicParsing="false" onAction="#onTestDesiredLineSelected" text="testDesiredLine" />
                         <MenuItem fx:id="testDesiredCurve" mnemonicParsing="false" onAction="#onTestDesiredCurveSelected" text="Test Desired Curve" />
                     <MenuItem mnemonicParsing="false" text="Delete" />

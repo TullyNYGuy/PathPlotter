@@ -27,6 +27,8 @@ public class FieldPlot {
     // getter and setter methods
     //*********************************************************************************************
     private ScatterChart fieldPlot;
+    private NumberAxis xAxis;
+    private NumberAxis yAxis;
 
     //*********************************************************************************************
     //          GETTER and SETTER Methods
@@ -45,7 +47,7 @@ public class FieldPlot {
     public FieldPlot(ScatterChart chart) {
         this.fieldPlot = chart;
 
-        NumberAxis xAxis = (NumberAxis) fieldPlot.getXAxis();
+        xAxis = (NumberAxis) fieldPlot.getXAxis();
         // field is 12' x 12'. Put the 0,0 in the center of  the field. So the field becomes -6' to +6'.
         // now convert that to inches. so -72" to +72"
         // autoranging rounds the field up to 80" so turn it off.
@@ -55,7 +57,7 @@ public class FieldPlot {
         // tick mark every inch
         xAxis.setTickUnit(1.0);
 
-        NumberAxis yAxis = (NumberAxis) fieldPlot.getYAxis();
+        yAxis = (NumberAxis) fieldPlot.getYAxis();
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(-72.0);
         yAxis.setUpperBound(72.0);
@@ -119,6 +121,23 @@ public class FieldPlot {
 
     public void clear() {
         fieldPlot.getData().clear();
+    }
+
+    public void viewAll() {
+        // field is 12' x 12'. Put the 0,0 in the center of  the field. So the field becomes -6' to +6'.
+        // now convert that to inches. so -72" to +72"
+        // autoranging rounds the field up to 80" so turn it off.
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(-72.0);
+        xAxis.setUpperBound(72.0);
+        // tick mark every inch
+        xAxis.setTickUnit(1.0);
+
+        yAxis = (NumberAxis) fieldPlot.getYAxis();
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(-72.0);
+        yAxis.setUpperBound(72.0);
+        yAxis.setTickUnit(1.0);
     }
 
     public void plotPoints(XYChart.Series series, String seriesName) {

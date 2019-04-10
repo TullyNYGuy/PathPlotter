@@ -97,6 +97,14 @@ public class PathPlotterController implements Initializable {
     }
 
     @FXML
+    private MenuItem viewAll;
+
+    @FXML
+    private void onViewAllSelected() {
+        fieldPlot.viewAll();
+    }
+
+    @FXML
     private MenuItem testDesiredLine;
 
     @FXML
