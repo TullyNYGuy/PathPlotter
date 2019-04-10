@@ -50,9 +50,8 @@ public class PathPlotterController implements Initializable {
         logFile = chooseSingleLog();
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
-        scatterChart.getData().addAll(logFileReader.getActualMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
-        scatterChart.getData().addAll(logFileReader.getDesiredMovementList().getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED)));
-
+        fieldPlot.plotPoints(logFileReader.getActualMovementXYChartSeries(), "Actual Movement");
+        fieldPlot.plotPoints(logFileReader.getDesiredMovementXYChartSeries(), "Desired Movement");
     }
 
     @FXML
@@ -66,13 +65,13 @@ public class PathPlotterController implements Initializable {
         }
     }
 
-    @FXML
-    private MenuItem plotSeries;
-
-    @FXML
-    private void onPlotSeriesSelected() {
-        plotSeries();
-    }
+//    @FXML
+//    private MenuItem plotSeries;
+//
+//    @FXML
+//    private void onPlotSeriesSelected() {
+//        plotSeries();
+//    }
     @FXML
     private MenuItem close;
 
@@ -94,7 +93,7 @@ public class PathPlotterController implements Initializable {
 
     @FXML
     private void onClearSelected() {
-        scatterChart.getData().clear();
+        fieldPlot.clear();
     }
 
     @FXML
@@ -105,7 +104,7 @@ public class PathPlotterController implements Initializable {
         XYChart.Series series;
         HeadingDistanceLine headingDistanceLine = new HeadingDistanceLine(45, 100, HeadingDistanceLine.DriveDirection.FORWARD);
         series = headingDistanceLine.getXYChartSeries();
-        scatterChart.getData().addAll(series);
+        fieldPlot.plotPoints(series,"Test Line");
     }
 
     @FXML
@@ -116,11 +115,13 @@ public class PathPlotterController implements Initializable {
         XYChart.Series series;
         Curve curve = new Curve(40, -45, -135, Curve.RotationDirection.CW, Curve.DriveDirection.BACKWARD);
         series = curve.getXYChartSeriesTest();
-        scatterChart.getData().addAll(series);
+        fieldPlot.plotPoints(series,"Test Curve");
     }
 
     @FXML
     private ScatterChart scatterChart;
+
+    private FieldPlot fieldPlot;
 
     /**
      * This method gets called just after the view loads.
@@ -129,70 +130,7 @@ public class PathPlotterController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        NumberAxis xAxis = (NumberAxis) scatterChart.getXAxis();
-        // field is 12' x 12'. Put the 0,0 in the center of  the field. So the field becomes -6' to +6'.
-        // now convert that to inches. so -72" to +72"
-        // autoranging rounds the field up to 80" so turn it off.
-        xAxis.setAutoRanging(false);
-        xAxis.setLowerBound(-72.0);
-        xAxis.setUpperBound(72.0);
-        // tick mark every inch
-        xAxis.setTickUnit(1.0);
-
-        NumberAxis yAxis = (NumberAxis) scatterChart.getYAxis();
-        yAxis.setAutoRanging(false);
-        yAxis.setLowerBound(-72.0);
-        yAxis.setUpperBound(72.0);
-        yAxis.setTickUnit(1.0);
-
-        scatterChart.setTitle("Rover Ruckus Field");
-        scatterChart.setStyle("-fx-background-color: transparent;");
-        // Use a read in jpg as the background. Make sure to remove the css that set that background before using this.
-        //scatterChart.setBackground(setFieldAsBackground());
-
-        // this crashes the compile
-        //this.stage.setOnCloseRequest(e -> closeProgram());
-
-        scatterChart.setOnMouseMoved( new EventHandler<MouseEvent>() {
-            @Override
-            public void handle( MouseEvent mouseEvent ) {
-                double xStart = scatterChart.getXAxis().getLocalToParentTransform().getTx();
-                double axisXRelativeMousePosition = mouseEvent.getX() - xStart;
-//                outputLabel.setText( String.format(
-//                        "%d, %d (%d, %d); %d - %d",
-//                        (int) mouseEvent.getSceneX(), (int) mouseEvent.getSceneY(),
-//                        (int) mouseEvent.getX(), (int) mouseEvent.getY(),
-//                        (int) xStart,
-//                        scatterChart.getXAxis().getValueForDisplay( axisXRelativeMousePosition ).intValue()
-//                ) );
-            }
-        } );
-
-        //Panning works via either secondary (right) mouse or primary with ctrl held down
-        ChartPanManager panner = new ChartPanManager( scatterChart );
-        panner.setMouseFilter( new EventHandler<MouseEvent>() {
-            @Override
-            public void handle( MouseEvent mouseEvent ) {
-                if ( mouseEvent.getButton() == MouseButton.SECONDARY ||
-                        ( mouseEvent.getButton() == MouseButton.PRIMARY &&
-                                mouseEvent.isShortcutDown() ) ) {
-                    //let it through
-                } else {
-                    mouseEvent.consume();
-                }
-            }
-        } );
-        panner.start();
-
-        //Zooming works only via primary mouse button without ctrl held down
-        JFXChartUtil.setupZooming( scatterChart, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle( MouseEvent mouseEvent ) {
-                if ( mouseEvent.getButton() != MouseButton.PRIMARY ||
-                        mouseEvent.isShortcutDown() )
-                    mouseEvent.consume();
-            }
-        } );
+        fieldPlot = new FieldPlot(scatterChart);
     }
 
     /**
@@ -238,93 +176,93 @@ public class PathPlotterController implements Initializable {
         this.stage.close();
     }
 
-    private List<Point2D> populateListPoints() {
-        List<Point2D> points = new ArrayList<Point2D>();
-
-        points.add(new Point2D(0.00035639, 0.02969991));
-        points.add(new Point2D(0.074614561, 5.583471315));
-        points.add(new Point2D(0.124995353, 10.06819709));
-        points.add(new Point2D(0.15946843, 14.46395602));
-        points.add(new Point2D(0.228184889, 19.33450464));
-        points.add(new Point2D(0.452510906, 24.67592053));
-        points.add(new Point2D(0.878191521, 30.57115082));
-        points.add(new Point2D(1.241740945, 35.07114156));
-        points.add(new Point2D(1.461248485, 39.5802535));
-        points.add(new Point2D(1.505471804, 45.60922939));
-        points.add(new Point2D(1.452598183, 48.46013578));
-        points.add(new Point2D(1.193724876, 55.76190117));
-
-        return points;
-    }
-
-    private List<Point2D> translatePoints(List<Point2D> points) {
-        List<Point2D> translatedPoints = new ArrayList<Point2D>();
-
-        for (Point2D point : points) {
-            point = point.add(10,10);
-            translatedPoints.add(point);
-        }
-    return translatedPoints;
-    }
-
-    private List<Point2D> rotatePoints(List<Point2D> points) {
-        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
-        Rotate rotate = new Rotate();
-        rotate.setAngle(-45);
-        rotate.setPivotX(0.0);
-        rotate.setPivotY(0.0);
-
-        for (Point2D point : points) {
-            Point2D rotatedPoint = rotate.transform(point.getX(), point.getY());
-            rotatedPoints.add(rotatedPoint);
-        }
-        return rotatedPoints;
-    }
-
-    private XYChart.Series populateSeriesFromListOfPoints(List<Point2D> points) {
-        XYChart.Series series = new XYChart.Series();
-
-        for (Point2D point : points) {
-            series.getData().add(new XYChart.Data(point.getX(), point.getY()));
-        }
-        return series;
-    }
-
-
-    private XYChart.Series populateSeries() {
-        XYChart.Series series1 = new XYChart.Series();
-
-        series1.setName("Move Straight");
-        series1.getData().add(new XYChart.Data(0.00035639, 0.02969991));
-        series1.getData().add(new XYChart.Data(0.074614561, 5.583471315));
-        series1.getData().add(new XYChart.Data(0.124995353, 10.06819709));
-        series1.getData().add(new XYChart.Data(0.15946843, 14.46395602));
-        series1.getData().add(new XYChart.Data(0.228184889, 19.33450464));
-        series1.getData().add(new XYChart.Data(0.452510906, 24.67592053));
-        series1.getData().add(new XYChart.Data(0.878191521, 30.57115082));
-        series1.getData().add(new XYChart.Data(1.241740945, 35.07114156));
-        series1.getData().add(new XYChart.Data(1.461248485, 39.5802535));
-        series1.getData().add(new XYChart.Data(1.505471804, 45.60922939));
-        series1.getData().add(new XYChart.Data(1.452598183, 48.46013578));
-        series1.getData().add(new XYChart.Data(1.193724876, 55.76190117));
-
-        return series1;
-    }
-
-
-    private void plotSeries() {
-        List<Point2D> originalPoints = new ArrayList<Point2D>();
-        originalPoints = populateListPoints();
-        scatterChart.getData().addAll(populateSeriesFromListOfPoints(originalPoints));
-
-        List<Point2D> translatedPoints = new ArrayList<Point2D>();
-        translatedPoints = translatePoints(originalPoints);
-        scatterChart.getData().addAll(populateSeriesFromListOfPoints(translatedPoints));
-
-        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
-        rotatedPoints = rotatePoints(originalPoints);
-        scatterChart.getData().addAll(populateSeriesFromListOfPoints(rotatedPoints));
-    }
+//    private List<Point2D> populateListPoints() {
+//        List<Point2D> points = new ArrayList<Point2D>();
+//
+//        points.add(new Point2D(0.00035639, 0.02969991));
+//        points.add(new Point2D(0.074614561, 5.583471315));
+//        points.add(new Point2D(0.124995353, 10.06819709));
+//        points.add(new Point2D(0.15946843, 14.46395602));
+//        points.add(new Point2D(0.228184889, 19.33450464));
+//        points.add(new Point2D(0.452510906, 24.67592053));
+//        points.add(new Point2D(0.878191521, 30.57115082));
+//        points.add(new Point2D(1.241740945, 35.07114156));
+//        points.add(new Point2D(1.461248485, 39.5802535));
+//        points.add(new Point2D(1.505471804, 45.60922939));
+//        points.add(new Point2D(1.452598183, 48.46013578));
+//        points.add(new Point2D(1.193724876, 55.76190117));
+//
+//        return points;
+//    }
+//
+//    private List<Point2D> translatePoints(List<Point2D> points) {
+//        List<Point2D> translatedPoints = new ArrayList<Point2D>();
+//
+//        for (Point2D point : points) {
+//            point = point.add(10,10);
+//            translatedPoints.add(point);
+//        }
+//    return translatedPoints;
+//    }
+//
+//    private List<Point2D> rotatePoints(List<Point2D> points) {
+//        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
+//        Rotate rotate = new Rotate();
+//        rotate.setAngle(-45);
+//        rotate.setPivotX(0.0);
+//        rotate.setPivotY(0.0);
+//
+//        for (Point2D point : points) {
+//            Point2D rotatedPoint = rotate.transform(point.getX(), point.getY());
+//            rotatedPoints.add(rotatedPoint);
+//        }
+//        return rotatedPoints;
+//    }
+//
+//    private XYChart.Series populateSeriesFromListOfPoints(List<Point2D> points) {
+//        XYChart.Series series = new XYChart.Series();
+//
+//        for (Point2D point : points) {
+//            series.getData().add(new XYChart.Data(point.getX(), point.getY()));
+//        }
+//        return series;
+//    }
+//
+//
+//    private XYChart.Series populateSeries() {
+//        XYChart.Series series1 = new XYChart.Series();
+//
+//        series1.setName("Move Straight");
+//        series1.getData().add(new XYChart.Data(0.00035639, 0.02969991));
+//        series1.getData().add(new XYChart.Data(0.074614561, 5.583471315));
+//        series1.getData().add(new XYChart.Data(0.124995353, 10.06819709));
+//        series1.getData().add(new XYChart.Data(0.15946843, 14.46395602));
+//        series1.getData().add(new XYChart.Data(0.228184889, 19.33450464));
+//        series1.getData().add(new XYChart.Data(0.452510906, 24.67592053));
+//        series1.getData().add(new XYChart.Data(0.878191521, 30.57115082));
+//        series1.getData().add(new XYChart.Data(1.241740945, 35.07114156));
+//        series1.getData().add(new XYChart.Data(1.461248485, 39.5802535));
+//        series1.getData().add(new XYChart.Data(1.505471804, 45.60922939));
+//        series1.getData().add(new XYChart.Data(1.452598183, 48.46013578));
+//        series1.getData().add(new XYChart.Data(1.193724876, 55.76190117));
+//
+//        return series1;
+//    }
+//
+//
+//    private void plotSeries() {
+//        List<Point2D> originalPoints = new ArrayList<Point2D>();
+//        originalPoints = populateListPoints();
+//        scatterChart.getData().addAll(populateSeriesFromListOfPoints(originalPoints));
+//
+//        List<Point2D> translatedPoints = new ArrayList<Point2D>();
+//        translatedPoints = translatePoints(originalPoints);
+//        scatterChart.getData().addAll(populateSeriesFromListOfPoints(translatedPoints));
+//
+//        List<Point2D> rotatedPoints = new ArrayList<Point2D>();
+//        rotatedPoints = rotatePoints(originalPoints);
+//        scatterChart.getData().addAll(populateSeriesFromListOfPoints(rotatedPoints));
+//    }
 
     private Background setFieldAsBackground() {
         Background background = Background.EMPTY;
@@ -349,9 +287,6 @@ public class PathPlotterController implements Initializable {
         catch(Exception e) {
             System.out.println(e);
         }
-
-
-
         return background;
     }
 

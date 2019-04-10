@@ -29,8 +29,6 @@
                         <MenuItem fx:id="openLog" mnemonicParsing="false" onAction="#onOpenLogSelected" text="Open Log" />
                         <MenuItem fx:id="openLogs" mnemonicParsing="false" onAction="#onOpenLogsSelected" text="Open Logs" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="plotSeries" mnemonicParsing="false" onAction="#onPlotSeriesSelected" text="Plot Series" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem fx:id="close" mnemonicParsing="false" onAction="#onCloseSelected" text="Close" />
                         <MenuItem fx:id="exit" mnemonicParsing="false" onAction="#onExitSelected" text="Exit" />
                   </items>
