@@ -1,6 +1,6 @@
 package sample;
 
-public class FieldConstants {
+public class RoverRuckusField {
 
     //*********************************************************************************************
     //          ENUMERATED TYPES
@@ -40,7 +40,7 @@ public class FieldConstants {
     // from it
     //*********************************************************************************************
 
-    public FieldConstants() {}
+    public RoverRuckusField() {}
 
     //*********************************************************************************************
     //          MAJOR METHODS

@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 
 import java.io.File;
@@ -229,11 +228,11 @@ public class LogFileReader {
     }
 
     public XYChart.Series getActualMovementXYChartSeries() {
-        return actualMovementList.getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED));
+        return actualMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.CRATER_SIDE_RED));
     }
 
     public XYChart.Series getDesiredMovementXYChartSeries() {
-        return desiredMovementList.getXYChartSeries(FieldConstants.xTranslate, FieldConstants.yTranslate, FieldConstants.getRotationAngleForStartPosition(FieldConstants.StartLocation.CRATER_SIDE_RED));
+        return desiredMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.CRATER_SIDE_RED));
     }
 }
 
