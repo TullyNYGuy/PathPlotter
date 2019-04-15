@@ -6,7 +6,7 @@ import javafx.scene.chart.XYChart;
 public class HeadingDistanceLine {
 
     public enum DriveDirection {
-        BACKWARD,
+        REVERSE,
         FORWARD
     }
 
