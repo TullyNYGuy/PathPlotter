@@ -41,6 +41,7 @@ public class PathPlotterController implements Initializable {
 
     private File logFile;
     private List<File> logFiles;
+    private RoverRuckusField roverRuckusField = new RoverRuckusField();
 
     @FXML
     private MenuItem openLog;
@@ -52,6 +53,10 @@ public class PathPlotterController implements Initializable {
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
         fieldPlot.plotPoints(logFileReader.getActualMovementXYChartSeries(), "Actual Movement");
         fieldPlot.plotPoints(logFileReader.getDesiredMovementXYChartSeries(), "Desired Movement");
+        if (!roverRuckusField.isPlotted()) {
+            fieldPlot.plotPoints(roverRuckusField.getFieldPoints(), "Field");
+            roverRuckusField.setPlotted(true);
+        }
     }
 
     @FXML
@@ -94,6 +99,7 @@ public class PathPlotterController implements Initializable {
     @FXML
     private void onClearSelected() {
         fieldPlot.clear();
+        roverRuckusField.setPlotted(false);
     }
 
     @FXML
