@@ -100,6 +100,7 @@ public class RoverRuckusField {
             fieldPoints.add(getLanderLegPoints());
             fieldPoints.add(getMineralPoints());
             fieldPoints.add(getWallPoints());
+            fieldPoints.add(getDepotPoints());
     }
 
     private Point2DList getLanderBodyPoints() {
@@ -176,10 +177,6 @@ public class RoverRuckusField {
         return mineralPoints;
     }
 
-    private void getDepotPoints() {
-
-    }
-
     private void getCraterPoints() {
 
     }
@@ -208,5 +205,58 @@ public class RoverRuckusField {
         }
         wallSinglePoints.add(new Point2D(x, maxY));
         return wallSinglePoints;
+    }
+
+    private Point2DList getDepotPoints() {
+        double minY = -70.5;
+        double maxY = -48.0;
+        double y = 0;
+
+        double minX = -70.5;
+        double maxX = -48.0;
+        double x = 0;
+        int numberPoints = 30;
+        Point2DList depotPoints = new Point2DList();
+
+        // lower left corner
+        x = -70.5;
+        for (int i = 0; i < numberPoints; i++) {
+            y = -48.0;
+            x = x + (maxX - minX) / numberPoints;
+            depotPoints.add(new Point2D(x, y));
+        }
+        depotPoints.add(new Point2D(x, maxY));
+
+        y = -70.5;
+        for (int i = 0; i < numberPoints; i++) {
+            x = -48.0;
+            y = y + (maxY - minY) / numberPoints;
+            depotPoints.add(new Point2D(x, y));
+        }
+        depotPoints.add(new Point2D(x, maxY));
+
+        // upper right corner
+        minY = 48.0;
+        maxY = 70.5;
+        minX = 48.0;
+        maxX = 70.5;
+
+        x = 48;
+        for (int i = 0; i < numberPoints; i++) {
+            y = +48.0;
+            x = x + (maxX - minX) / numberPoints;
+            depotPoints.add(new Point2D(x, y));
+        }
+        depotPoints.add(new Point2D(x, maxY));
+
+        y = 48;
+        for (int i = 0; i < numberPoints; i++) {
+            x = +48.0;
+            y = y + (maxY - minY) / numberPoints;
+            depotPoints.add(new Point2D(x, y));
+        }
+        depotPoints.add(new Point2D(x, maxY));
+
+        return depotPoints;
     }
 }
