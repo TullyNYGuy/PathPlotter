@@ -70,6 +70,7 @@ public class LogFileReader {
         ActualMovement driveStraightUsingIMUActual = null;
         ActualMovement driveCurve = null;
         ActualMovement spinTurn = null;
+        String lastMovement = "";
 
         try {
             scannerFile = new Scanner(file);
@@ -137,6 +138,7 @@ public class LogFileReader {
                                             break;
                                     }
                                 }
+                                lastMovement = "DRIVE_STRAIGHT_USING_IMU";
                                 break;
 
                             case "CURVE":
@@ -192,6 +194,7 @@ public class LogFileReader {
                                             break;
                                     }
                                 }
+                                lastMovement = "CURVE";
                                 break;
 
                             case "SPIN_TURN":
@@ -216,6 +219,19 @@ public class LogFileReader {
                                     }
                                 }
                                 break;
+                            case "Voting":
+                                switch (lastMovement) {
+                                    case "CURVE":
+                                        actualMovementList.add(driveCurve);
+                                        break;
+                                    case "DRIVE_STRAIGHT_USING_IMU":
+                                        actualMovementList.add(driveStraightUsingIMUActual);
+                                        break;
+                                    case "SPIN_TURN":
+                                        actualMovementList.add(spinTurn);
+                                        break;
+                                }
+
                             default:
                                 break;
                         }
@@ -228,11 +244,17 @@ public class LogFileReader {
     }
 
     public XYChart.Series getActualMovementXYChartSeries() {
-        return actualMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.CRATER_SIDE_RED));
+        return actualMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.DEMO));
     }
 
     public XYChart.Series getDesiredMovementXYChartSeries() {
-        return desiredMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.CRATER_SIDE_RED));
+        XYChart.Series result;
+        if (desiredMovementList.size() > 0) {
+            result = desiredMovementList.getXYChartSeries(RoverRuckusField.xTranslate, RoverRuckusField.yTranslate, RoverRuckusField.getRotationAngleForStartPosition(RoverRuckusField.StartLocation.DEMO));
+        } else {
+            result = null;
+        }
+        return result;
     }
 }
 

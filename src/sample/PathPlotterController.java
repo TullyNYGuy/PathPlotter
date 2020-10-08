@@ -52,7 +52,10 @@ public class PathPlotterController implements Initializable {
         System.out.println("log selected: " + logFile.getAbsolutePath());
         LogFileReader logFileReader= new LogFileReader(logFile.getAbsolutePath());
         fieldPlot.plotPoints(logFileReader.getActualMovementXYChartSeries(), "Actual Movement");
-        fieldPlot.plotPoints(logFileReader.getDesiredMovementXYChartSeries(), "Desired Movement");
+        XYChart.Series desiredMovementXYChartSeries = logFileReader.getDesiredMovementXYChartSeries();
+        if (desiredMovementXYChartSeries != null) {
+            fieldPlot.plotPoints(desiredMovementXYChartSeries, "Desired Movement");
+        }
         if (!roverRuckusField.isPlotted()) {
             fieldPlot.plotPoints(roverRuckusField.getFieldPoints(), "Field");
             roverRuckusField.setPlotted(true);

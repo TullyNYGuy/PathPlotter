@@ -93,4 +93,8 @@ public class DesiredMovementList {
         // convert the Point2D list to XYChart.Series
         return point2DList.convertToXYChartSeries();
     }
+
+    public int size() {
+        return desiredMovementList.size();
+    }
 }

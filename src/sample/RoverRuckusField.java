@@ -17,7 +17,8 @@ public class RoverRuckusField {
         CRATER_SIDE_RED,
         DEPOT_SIDE_RED,
         CRATER_SIDE_BLUE,
-        DEPOT_SIDE_BLUE
+        DEPOT_SIDE_BLUE,
+        DEMO
     }
 
     //*********************************************************************************************
@@ -84,6 +85,9 @@ public class RoverRuckusField {
                 break;
             case DEPOT_SIDE_BLUE:
                 angle = 45;
+                break;
+            case DEMO:
+                angle = 0;
                 break;
         }
         return angle;
